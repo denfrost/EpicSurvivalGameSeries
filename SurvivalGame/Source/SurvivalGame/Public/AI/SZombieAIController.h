@@ -5,7 +5,10 @@
 #include "AIController.h"
 #include "SCharacter.h"
 #include "SBotWaypoint.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "SZombieAIController.generated.h"
+
+class UBehaviorTreeComponent;
 
 /**
  * 
@@ -21,6 +24,13 @@ class SURVIVALGAME_API ASZombieAIController : public AAIController
 	virtual void Possess(class APawn* InPawn) override;
 
 	virtual void UnPossess() override;
+
+	/* Called whenever AI stimulus is updated */
+	UFUNCTION()
+	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+
+	/* Used to determine whether or not an actor is hostile or friendly */
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 
 	UBehaviorTreeComponent* BehaviorComp;
 
@@ -39,7 +49,6 @@ class SURVIVALGAME_API ASZombieAIController : public AAIController
 	FName BotTypeKeyName;
 
 public:
-
 	ASBotWaypoint* GetWaypoint();
 
 	ASBaseCharacter* GetTargetEnemy();
